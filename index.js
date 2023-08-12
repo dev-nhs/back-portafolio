@@ -22,16 +22,9 @@ router.get('/', (req, res) => {
 
 router.post('/sendemail', (req, res) => {
 
-  try {
-    main(req);
-    res.status(200).json(req.body);
-  } catch (err) {
-    res.status(200).json(err);
-    main(req).catch(console.error);
-  }
+  res.send(main(req).catch(console.error));
 
-  main(req).catch(console.error);
-  console.log(req.body);
+
 });
 
 
