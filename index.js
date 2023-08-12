@@ -462,13 +462,6 @@ async function main(req) {
 }
 
 
-
-
-
-router.listen(config.PORT, () => {
-  console.log('servicio DevOps con puerto: ' + config.PORT);
-});
-
-/* var port = config.PORT || 9090;
+var port = config.PORT;
 app.listen(port);
-console.log('Se ha desplegado el API DevOps: ' + port); */
+console.log('Se ha desplegado el API DevOps: ' + port);
