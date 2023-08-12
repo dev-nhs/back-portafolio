@@ -24,12 +24,11 @@ router.post('/sendemail', (req, res) => {
 
   res.send(main(req).catch(console.error));
 
-
 });
 
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com", /* smtp.gmail.com */
+  host: "gmail", /* smtp.gmail.com */
   port: 465,
   secure: true,
   auth: {
