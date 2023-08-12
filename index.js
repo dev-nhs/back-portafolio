@@ -464,8 +464,10 @@ async function main(req) {
 
 
 
-router.listen(config.PORT);
-console.log('servicio DevOps con puerto: ' + config.PORT);
+
+router.listen(config.PORT, () => {
+  console.log('servicio DevOps con puerto: ' + config.PORT);
+});
 
 /* var port = config.PORT || 9090;
 app.listen(port);
