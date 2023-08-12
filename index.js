@@ -43,7 +43,7 @@ async function main(req) {
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: `"Boot DevOps 👻" <${req.body.email}>`, // sender address
-    to: "nehemiashs_16@outlook.es", // list of receivers
+    to: "nehemiashs_16@outlook.es", // list of receivers sss
     date: new Date(),
     subject: `${req.body.subject} ✔`, // Subject line
     text: "Hello world?", // plain text body
