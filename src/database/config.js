@@ -10,6 +10,7 @@ const DB_PASS = process.env.DB_PASS || 'root'
 const DB_NAME = process.env.DB_NAME || 'dbtestworld'
 const EMAIL = process.env.EMAIL || 'example@dev.es'
 const PASSWORD= process.env.PASSWORD || 'password'
+const EMAIL_RECEIVED = process.env.EMAIL_RECEIVED || 'example@received.com'
 
 module.exports = {
     MYSQL_URL: MYSQL_URL,
@@ -20,6 +21,7 @@ module.exports = {
     DB_PASS: DB_PASS,
     DB_NAME: DB_NAME,
     EMAIL: EMAIL,
-    PASSWORD: PASSWORD
+    PASSWORD: PASSWORD,
+    EMAIL_RECEIVED: EMAIL_RECEIVED
 
 }

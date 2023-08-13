@@ -22,13 +22,26 @@ router.get('/', (req, res) => {
 
 router.post('/sendemail', (req, res) => {
 
-  res.send(main(req).catch(console.error));
+  //res.send(main(req).catch(console.error));
+ main(req).catch(console.error);
+  /* main().catch((error) => {
+    console.error("Error sending email:", error);
+  }); */
+  // verify connection configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(success);
+  }
+});
 
 });
 
 
+
 const transporter = nodemailer.createTransport({
-  host: "gmail", /* smtp.gmail.com */
+  host: "smtp.gmail.com", /* smtp.gmail.com */
   port: 465,
   secure: true,
   auth: {
@@ -43,11 +56,10 @@ async function main(req) {
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: `"Boot DevOps 👻" <${req.body.email}>`, // sender address
-    to: "nehemiashs_16@outlook.es", // list of receivers sss
-    date: new Date(),
+    to: config.EMAIL_RECEIVED, // list of receivers sss
     subject: `${req.body.subject} ✔`, // Subject line
     text: "Hello world?", // plain text body
-    html: ` <head>
+    html: ` <head> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Simple Transactional Email</title>
