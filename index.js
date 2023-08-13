@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/sendemail', (req, res) => {
-  res.send(config.EMAIL +" "+ config.PASSWORD +" "+ config.EMAIL_RECEIVED );
+  //res.send(config.EMAIL +" "+ config.PASSWORD +" "+ config.EMAIL_RECEIVED );
   //res.send(main(req).catch(console.error));
  main(req).catch(console.error);
   /* main().catch((error) => {
@@ -30,13 +30,13 @@ router.post('/sendemail', (req, res) => {
   // verify connection configuration
 
 
-  /* transporter.verify(function (error, success) {
+  transporter.verify(function (error, success) {
   if (error) {
     res.send(error);
   } else {
     res.send(success);
   }
-}); */
+}); 
 
 });
 
