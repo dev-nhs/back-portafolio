@@ -21,46 +21,48 @@ router.get('/', (req, res) => {
 });
 
 router.post('/sendemail', (req, res) => {
-  //res.send(config.EMAIL +" "+ config.PASSWORD +" "+ config.EMAIL_RECEIVED );
-  //res.send(main(req).catch(console.error));
- main(req).catch(console.error);
-  /* main().catch((error) => {
-    console.error("Error sending email:", error);
-  }); */
-  // verify connection configuration
+    res.send(main(req,res))
+})
 
 
-  transporter.verify(function (error, success) {
-  if (error) {
-    res.send(error);
-  } else {
-    res.send(success);
-  }
-}); 
-
-});
 
 
+async function main(req, res) {
+
+const { name, subject, email, message } = JSON.parse(req.body);
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com", /* smtp.gmail.com */
-  port: 465,
-  secure: true,
-  auth: {
-    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: config.EMAIL,
-    pass: config.PASSWORD
-  }
+    port: 465,
+    host: "smtp.gmail.com",
+    auth: {
+        user: config.EMAIL,
+        pass: config.PASSWORD,
+    },
+    secure: true,
 });
 
-// async..await is not allowed in global scope, must use a wrapper
-async function main(req) {
-  // send mail with defined transport object
-  const info = await transporter.sendMail({
-    from: `"Bot DevOps 🤖" <${req.body.email}>`, // sender address
-    to: config.EMAIL_RECEIVED, // list of receivers sss
-    subject: `${req.body.subject} ✔`, // Subject line
-    text: "Hello world?", // plain text body
+await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+        if (error) {
+            console.log(error);
+            reject(error);
+        } else {
+            console.log("Server is ready to take our messages");
+            resolve(success);
+        }
+    });
+});
+
+const mailData = {
+    from: {
+        name: `${name}`,
+        address: `${email}`,
+    },
+    replyTo: email,
+    to: config.EMAIL_RECEIVED,
+    subject: `${subject}`,
+    text: message,
     html: `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -236,19 +238,24 @@ async function main(req) {
     </table>
     </body>
     </html>
-    `, // html body
-  });
+    `,
+};
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(mailData, (err, info) => {
+        if (err) {
+            console.error(err);
+            reject(err);
+        } else {
+            console.log(info);
+            resolve(info);
+        }
+    });
+});
 
-  //
-  // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
-  //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
-  //       <https://github.com/forwardemail/preview-email>
-  //
-}
-
+res.status(200).json({ status: "OK" });
+};
 
 var port = config.PORT;
 app.listen(port);
