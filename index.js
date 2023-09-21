@@ -21,15 +21,15 @@ router.get('/', (req, res) => {
 });
 
 router.post('/sendemail', (req, res) => {
-    res.send(main(req,res))
+    res.send(main(req))
 })
 
 
 
 
-async function main(req, res) {
+async function main(req) {
 
-const { name, subject, email, message } = JSON.parse(req.body);
+//const { name, subject, email, message } = JSON.parse(req.body);
 
 const transporter = nodemailer.createTransport({
     port: 465,
@@ -56,13 +56,13 @@ await new Promise((resolve, reject) => {
 
 const mailData = {
     from: {
-        name: `${name}`,
-        address: `${email}`,
+        name: `${req.body.name}`,
+        address: `${req.body.email}`,
     },
-    replyTo: email,
+    replyTo: req.body.email,
     to: config.EMAIL_RECEIVED,
-    subject: `${subject}`,
-    text: message,
+    subject: `${req.body.subject}`,
+    text: req.body.message,
     html: `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -254,7 +254,7 @@ await new Promise((resolve, reject) => {
     });
 });
 
-res.status(200).json({ status: "OK" });
+/* res.status(200).json({ status: "OK" }); */
 };
 
 var port = config.PORT;
