@@ -4,7 +4,9 @@
   "description": "back end portafolio Developer Nehemias",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    
+    "start": "NODE_ENV=development ./node_modules/.bin/bak-portafolio serve src",
+    "build": "NODE_ENV=production ./node_modules/.bin/bak-portafolio build src"
   },
   "keywords": [],
   "author": "",
