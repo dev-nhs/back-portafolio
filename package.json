@@ -4,10 +4,8 @@
   "description": "back end portafolio Developer Nehemias",
   "main": "index.js",
   "scripts": {
-    
-    "start": "node index.js",
-    "transpile": "tsc --outDir dist",
-    "build": "npm run transpile && npm run bundle"
+    "build": "npm run bundle",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
