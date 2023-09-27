@@ -6,6 +6,7 @@
   "scripts": {
     
     "start": "node index.js",
+    "transpile": "tsc --outDir dist",
     "build": "npm run transpile && npm run bundle"
   },
   "keywords": [],
