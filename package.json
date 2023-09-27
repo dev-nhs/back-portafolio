@@ -4,8 +4,7 @@
   "description": "back end portafolio Developer Nehemias",
   "main": "dist/index.js",
   "scripts": {
-    "bundle": "webpack",
-    "build": "npm run bundle",
+    "build": "webpack",
     "start": "node dist/index.js"
   },
   "keywords": [],
