@@ -1,18 +1,16 @@
 "use strict";
 const nodemailer = require("nodemailer");
-
-const config = require('./src/database/config')
 const express = require('express');
 const bodyParser = require('body-parser');
-var cors = require('cors');
+const cors = require('cors');
+const config = require('./src/database/config');
 
 const app = express();
+const router = express.Router();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-
-const router = express.Router();
 
 app.use('/api', router);
 
@@ -20,47 +18,31 @@ router.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 
-router.post('/sendemail', (req, res) => {
-    //res.send(config.EMAIL +" "+ config.PASSWORD +" "+ config.EMAIL_RECEIVED );
-    //res.send(main(req).catch(console.error));
-   main(req).catch(console.error);
-    /* main().catch((error) => {
-      console.error("Error sending email:", error);
-    }); */
-    // verify connection configuration
-  
-  
-    transporter.verify(function (error, success) {
-    if (error) {
-      res.send(error);
-    } else {
-      res.send(success);
-    }
-  }); 
-  
-  });
-  
-  
-  
+router.post('/sendemail', async (req, res) => {
+
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com", /* smtp.gmail.com */
     port: 465,
-    secure: true,
+    host: "smtp.gmail.com",
     auth: {
-      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
       user: config.EMAIL,
-      pass: config.PASSWORD
-    }
+      pass: config.PASSWORD,
+    },
+    secure: true,
   });
-  
-  // async..await is not allowed in global scope, must use a wrapper
-  async function main(req) {
-    // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: `"Bot DevOps 🤖" <${req.body.email}>`, // sender address
-      to: config.EMAIL_RECEIVED, // list of receivers sss
-      subject: `${req.body.subject} ✔`, // Subject line
-      text: "Hello world?", // plain text body
+
+  try {
+    // Verify connection configuration
+    await transporter.verify();
+
+    const mailData = {
+      from: {
+        name: "Bot DevOps 🤖", 
+        address: req.body.email,
+      },
+      replyTo: config.EMAIL_RECEIVED,
+      to: config.EMAIL_RECEIVED,
+      subject: `${req.body.subject} ✔`,
+      text: "Hello world?",
       html: `<!DOCTYPE html>
       <html lang="en">
       <head>
@@ -237,21 +219,20 @@ router.post('/sendemail', (req, res) => {
       </body>
       </html>
       `, // html body
-    });
-  
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-  
-    //
-    // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
-    //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
-    //       <https://github.com/forwardemail/preview-email>
-    //
-  }
-  
-  
-  
+    };
 
-var port = config.PORT;
-app.listen(port);
-console.log('Se ha desplegado el API DevOps: ' + port);
+    // Send mail
+    const info = await transporter.sendMail(mailData);
+    console.log(info);
+
+    res.status(200).json({ status: "OK" });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+const port = config.PORT;
+app.listen(port, () => {
+  console.log('API DevOps has been deployed: ' + port);
+});
